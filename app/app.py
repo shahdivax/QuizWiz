@@ -5,9 +5,9 @@ from llama_index.llms.gemini import Gemini
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 from llama_index.core import Settings
 import os
+from dotenv import load_dotenv
 
-GOOGLE_API_KEY = "AIzaSyAoEdYoQvJ6806CqTSvpU5UM_O2NO9x-O0"  # add your GOOGLE API key here
-os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
+load_dotenv()
 
 Settings.embed_model = GeminiEmbedding(
     model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY
