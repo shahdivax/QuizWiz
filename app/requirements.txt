@@ -1,0 +1,6 @@
+llama-index
+llama-index-llms-gemini
+flask
+python-dotenv
+google-generativeai
+setuptools
