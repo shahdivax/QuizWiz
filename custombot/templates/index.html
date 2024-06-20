@@ -12,7 +12,7 @@
 
     <div id="custombot-container"></div>
 
-    <script src="https://litter.catbox.moe/fssr8u.js"></script>
+    <script src="{{ url_for('static', filename='js/widget.js') }}"></script>
     <script>
         CustomBot.init({
             serverUrl: '{{ request.url_root }}',

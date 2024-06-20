@@ -10,28 +10,33 @@ from dotenv import load_dotenv
 load_dotenv()
 
 Settings.embed_model = GeminiEmbedding(
-    model_name="models/text-embedding-004",
+    model_name="models/text-embedding-004"
 )
 Settings.llm = Gemini(model_name="models/gemini-1.5-flash-latest")
 
 documents = SimpleDirectoryReader("data").load_data()
 index = VectorStoreIndex.from_documents(documents)
 
-query_engine = index.as_query_engine()
+chat_engine = index.as_chat_engine(chat_mode="condense_question", streaming=True)
 
 app = Flask(__name__)
 
 
 @app.route("/")
 def index():
+    chat_engine.reset()
     return render_template("index.html")
 
 
 @app.route("/chat", methods=["POST"])
 def chat():
     user_input = request.json["input"]
-    response = query_engine.query(user_input)
-    return jsonify({"output": [str(response)]})
+    response = chat_engine.stream_chat(user_input)
+    response_ai = []
+    output_texts = [chunk for chunk in response.response_gen]
+    response_ai.append(''.join(output_texts))
+    chat_engine.reset()
+    return jsonify({"output": response_ai})
 
 
 if __name__ == "__main__":
