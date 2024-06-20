@@ -4,3 +4,4 @@ flask
 python-dotenv
 google-generativeai
 setuptools
+llama-index-vector-stores-mongodb
