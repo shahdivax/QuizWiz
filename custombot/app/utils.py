@@ -27,6 +27,8 @@ atlas_vector_store = MongoDBAtlasVectorSearch(
 query_engine = None
 uploaded = True
 
+# TODO: try with posgress database
+
 def initialize_index():
     global uploaded, query_engine, atlas_vector_store
     if not uploaded:
