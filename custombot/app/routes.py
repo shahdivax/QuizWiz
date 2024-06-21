@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request, render_template
-from app.utils import query_engine
+from app.utils import get_query_engine
+
+
 
 bp = Blueprint('main', __name__)
 
@@ -10,6 +12,7 @@ def index():
 @bp.route('/chat', methods=['POST'])
 def chat():
     user_input = request.json['input']
+    query_engine = get_query_engine()
     response = query_engine.query(user_input)
     return jsonify({'output': [str(response)]})
 
