@@ -36,6 +36,6 @@ Join us in revolutionizing customer interaction. With QuizWiz, the future of cus
 
 ---
 
-For more information, documentation, and support, visit our [official website](#).
+For more information, documentation, and support, visit our [official website](https://github.com/shahdivax/QuizWiz).
 
 QuizWiz - Empowering businesses with intelligent conversation.
