@@ -1,6 +1,9 @@
 (function() {
     window.CustomBot = {
         init: function(config) {
+            if (!config.botId) {
+                throw new Error("Bot ID is required");
+            }
             this.elementId = config.elementId || 'custombot-container';
             this.serverUrl = config.serverUrl || 'http://localhost:5000';
             this.botName = config.botName || 'Helper Bot';
@@ -154,7 +157,8 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         },
 
-        fetchResponse: function(message) {
+         fetchResponse: function(message) {
+            console.log('Sending request with botId:', this.botId); // Debug log
             fetch(`${this.serverUrl}/chat`, {
                 method: 'POST',
                 headers: {
@@ -166,18 +170,13 @@
                 })
             })
             .then(response => {
-                const contentType = response.headers.get("content-type");
-                if (contentType && contentType.indexOf("application/json") !== -1) {
-                    return response.json().catch(e => {
-                        throw new Error('Invalid JSON: ' + e.message);
-                    });
-                } else {
-                    return response.text().then(text => {
-                        throw new Error('Received non-JSON response from server');
-                    });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                return response.json();
             })
             .then(data => {
+                console.log('Received response:', data); // Debug log
                 const botMessages = Array.isArray(data.output) ? data.output : [data.output];
                 botMessages.forEach(botMessage => {
                     this.addMessageToChat(botMessage, 'bot');
@@ -185,7 +184,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                this.addMessageToChat(`Error: ${error.message}. Please check the console for more details.`, 'bot');
+                this.addMessageToChat('Sorry, I encountered an error. Please try again later.', 'bot');
             });
         }
     };

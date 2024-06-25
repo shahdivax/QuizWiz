@@ -109,6 +109,7 @@ botForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         const embedCode = `
+<div id="custombot-container"></div>
 <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz/custombot/static/js/widget.js"><\/script>
 <script>
     CustomBot.init({
