@@ -1,7 +1,12 @@
 // Theme toggle
 const themeToggle = document.getElementById('themeToggle');
+const moonIcon = document.getElementById('moonIcon');
+const sunIcon = document.getElementById('sunIcon');
+
 themeToggle.addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
+    moonIcon.classList.toggle('hidden');
+    sunIcon.classList.toggle('hidden');
 });
 
 // Logo preview
@@ -62,6 +67,8 @@ const botForm = document.getElementById('botForm');
 const snippetContainer = document.getElementById('snippetContainer');
 const snippet = document.getElementById('snippet');
 const generateButton = document.getElementById('generateButton');
+const copySnippet = document.getElementById('copySnippet');
+const notification = document.getElementById('notification');
 
 botForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -115,14 +122,24 @@ botForm.addEventListener('submit', async (e) => {
 
         snippet.textContent = embedCode;
         snippetContainer.classList.remove('hidden');
+        showNotification('Bot created successfully!');
     } catch (error) {
         console.error('Error creating bot:', error);
-        alert('An error occurred while creating the bot. Please try again.');
+        showNotification('An error occurred while creating the bot. Please try again.', 'error');
     } finally {
         // Re-enable form fields and hide progress
         disableFormFields(false);
         hideProgress();
     }
+});
+
+copySnippet.addEventListener('click', () => {
+    navigator.clipboard.writeText(snippet.textContent.trim()).then(() => {
+        showNotification('Snippet copied to clipboard!');
+    }).catch(err => {
+        console.error('Error copying snippet: ', err);
+        showNotification('Failed to copy snippet. Please try again.', 'error');
+    });
 });
 
 function disableFormFields(disabled) {
@@ -146,4 +163,14 @@ function showProgress() {
 function hideProgress() {
     generateButton.innerHTML = 'Generate Snippet';
     generateButton.disabled = false;
+}
+
+function showNotification(message, type = 'success') {
+    notification.textContent = message;
+    notification.classList.remove('hidden', 'bg-green-500', 'bg-red-500');
+    notification.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
+    notification.classList.remove('hidden');
+    setTimeout(() => {
+        notification.classList.add('hidden');
+    }, 3000);
 }

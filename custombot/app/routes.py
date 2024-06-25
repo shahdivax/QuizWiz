@@ -21,38 +21,29 @@
 #     return jsonify({'status': 'healthy'}), 200
 
 from flask import Blueprint, jsonify, request, render_template, send_from_directory
-from app.utils import get_query_engine, initialize_index_for_bot
+from app.utils import get_query_engine, initialize_index_for_bot  #,save_logo_to_database, get_logo_from_database
 import os
 import uuid
-# import logging
-# import traceback
 
 bp = Blueprint('main', __name__)
-
 
 @bp.route('/', methods=['GET'])
 def home():
     return render_template('home.html')
 
-
 @bp.route('/index', methods=['GET'])
 def index():
     return render_template('index.html')
-
 
 @bp.route('/chat', methods=['POST'])
 def chat():
     try:
         data = request.json
-        # logging.info(f"Received data: {data}")  # Info log
-
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
 
         user_input = data.get('input')
         bot_id = data.get('botId')
-
-        # logging.info(f"Extracted input: {user_input}, botId: {bot_id}")  # Info log
 
         if not user_input:
             return jsonify({'error': 'No input provided'}), 400
@@ -65,13 +56,9 @@ def chat():
         return jsonify({'output': str(response)})
 
     except FileNotFoundError as e:
-        # logging.error(f"Bot not found: {str(e)}")
         return jsonify({'error': f'Bot not found: {str(e)}'}), 404
     except Exception as e:
-        # logging.error(f"Unexpected error: {str(e)}")
-        # logging.error(traceback.format_exc())  # Log the full traceback
         return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
-
 
 @bp.route('/create-bot', methods=['POST'])
 def create_bot():
@@ -90,7 +77,8 @@ def create_bot():
         logo_filename = f"{bot_id}_logo{os.path.splitext(bot_logo.filename)[1]}"
         os.makedirs(f'{bot_dir}/images/', exist_ok=True)
         logo_dir = f'{bot_dir}/images/'
-        bot_logo.save(os.path.join(logo_dir, logo_filename))
+        logo_path = os.path.join(logo_dir, logo_filename)
+        bot_logo.save(logo_path)
 
     doc_filenames = []
     for doc in documents:
@@ -105,17 +93,20 @@ def create_bot():
     return jsonify({
         'serverUrl': host_url,
         'botName': bot_name,
-        'botImageUrl': f"../bots/{bot_id}/images/{bot_id}_logo.png" if logo_filename else None,
+        'botImageUrl': f"/bot-logo/{bot_id}" if logo_filename else None,
         'botId': bot_id,
         'uploadedFiles': [doc.filename for doc in documents]
     })
 
 
-@bp.route('/bot-logo/<bot_id>', methods=['GET'])
-def bot_logo(bot_id):
-    bot_dir = os.path.join('bots', bot_id)
-    logo_file = next(f for f in os.listdir(bot_dir) if f.startswith(f"{bot_id}_logo"))
-    return send_from_directory(bot_dir, logo_file)
+# @bp.route('/bot-logo/<bot_id>', methods=['GET'])
+# def bot_logo(bot_id):
+#     bot_dir = os.path.join('bots', bot_id, 'images')
+#     logo_file = next((f for f in os.listdir(bot_dir) if f.startswith(f"{bot_id}_logo")), None)
+#     if logo_file:
+#         return send_from_directory(bot_dir, logo_file)
+#     else:
+#         return 'Logo not found', 404
 
 
 @bp.route('/health', methods=['GET'])

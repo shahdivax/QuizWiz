@@ -138,7 +138,7 @@ from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.legacy.embeddings import GeminiEmbedding
 from llama_index.llms.gemini import Gemini
 from llama_index.vector_stores.postgres import PGVectorStore
-from sqlalchemy import make_url, create_engine, text
+from sqlalchemy import create_engine, text, make_url
 import psycopg2
 from dotenv import load_dotenv
 
@@ -181,28 +181,55 @@ def initialize_index_for_bot(bot_id, bot_name, document_paths):
 
 
 def get_query_engine(bot_id):
-    # bot_name = get_bot_name_from_id(bot_id)
     vector_store = get_vector_store(bot_id)
     vector_store_index = VectorStoreIndex.from_vector_store(vector_store=vector_store)
     vector_store_retriever = VectorIndexRetriever(index=vector_store_index, similarity_top_k=5)
     response_synthesizer = get_response_synthesizer(response_mode="refine")
     query_engines = RetrieverQueryEngine(retriever=vector_store_retriever,
-                                                 response_synthesizer=response_synthesizer)
+                                         response_synthesizer=response_synthesizer)
 
     return query_engines
 
 
-def get_bot_name_from_id(bot_id):
-    # Implement this function to retrieve the bot name from the database using the bot_id
-    # For now, we'll use a placeholder implementation
-    return f"bot_{bot_id}"
+# def save_logo_to_database(bot_id, logo_path):
+#     conn = psycopg2.connect(connection_string)
+#     try:
+#         with conn.cursor() as cur:
+#             with open(logo_path, 'rb') as logo_file:
+#                 logo_data = logo_file.read()
+#             cur.execute(
+#                 "INSERT INTO bot_logos (bot_id, logo_data) VALUES (%s, %s) ON CONFLICT (bot_id) DO UPDATE SET logo_data = EXCLUDED.logo_data",
+#                 (bot_id, psycopg2.Binary(logo_data))
+#             )
+#         conn.commit()
+#     except Exception as e:
+#         print(f"Error saving logo to database: {e}")
+#         conn.rollback()
+#     finally:
+#         conn.close()
+#
+#
+# def get_logo_from_database(bot_id):
+#     conn = psycopg2.connect(connection_string)
+#     try:
+#         with conn.cursor() as cur:
+#             cur.execute("SELECT logo_data FROM bot_logos WHERE bot_id = %s", (bot_id,))
+#             result = cur.fetchone()
+#             return result[0] if result else None
+#     except Exception as e:
+#         print(f"Error retrieving logo from database: {e}")
+#     finally:
+#         conn.close()
 
 
 def init_db():
-    connection = psycopg2.connect(connection_string)
-    connection.autocommit = True
-    # with connection.cursor() as c:
-        # print(c.execute("SELECT * from quizwiz_7b7dddac-d5a0-4643-8dd5-e296c9fbdeab"))
-
-    # The PGVectorStore will create the table when it's first used
+    conn = psycopg2.connect(connection_string)
+    with conn.cursor() as c:
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS bot_logos (
+                bot_id TEXT PRIMARY KEY,
+                logo_data BYTEA NOT NULL
+            )
+        """)
+        conn.commit()
     print("Database initialized successfully")
