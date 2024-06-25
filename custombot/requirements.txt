@@ -6,5 +6,5 @@ llama-index-llms-gemini
 google-generativeai
 llama-index-vector-stores-postgres
 llama-index-vector-stores-mongodb
-pymong
+pymongo
 python-dotenv
