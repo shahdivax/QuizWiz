@@ -158,7 +158,7 @@
         },
 
          fetchResponse: function(message) {
-            console.log('Sending request with botId:', this.botId); // Debug log
+//            console.log('Sending request with botId:', this.botId); // Debug log
             fetch(`${this.serverUrl}/chat`, {
                 method: 'POST',
                 headers: {
@@ -176,14 +176,14 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Received response:', data); // Debug log
+//                console.log('Received response:', data); // Debug log
                 const botMessages = Array.isArray(data.output) ? data.output : [data.output];
                 botMessages.forEach(botMessage => {
                     this.addMessageToChat(botMessage, 'bot');
                 });
             })
             .catch(error => {
-                console.error('Error:', error);
+//                console.error('Error:', error);
                 this.addMessageToChat('Sorry, I encountered an error. Please try again later.', 'bot');
             });
         }
