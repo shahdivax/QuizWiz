@@ -5,11 +5,14 @@ import uuid
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
+from dotenv import load_dotenv
+
+load_dotenv()
 
 cloudinary.config(
-    cloud_name="djc2l2zjr",
-    api_key="237746636356213",
-    api_secret="pTfBdkFGauU2G7r_xLvR0QwDHgQ",  # Click 'View Credentials' below to copy your API secret
+    cloud_name=os.environ["CLOUDINARY_NAME"],
+    api_key=os.environ["CLOUDINARY_API"],
+    api_secret=os.environ["CLOUDINARY_SECRET"],
     secure=True
 )
 
