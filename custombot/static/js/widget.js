@@ -5,6 +5,7 @@
             this.serverUrl = config.serverUrl || 'http://localhost:5000';
             this.botName = config.botName || 'Helper Bot';
             this.botImageUrl = config.botImageUrl || '/static/images/chat-icon.png';
+            this.botId = config.botId;
             this.createWidget();
             this.setupEventListeners();
         },
@@ -159,7 +160,8 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ input: message })
+                body: JSON.stringify({ input: message,
+                botId: this.botId })
             })
             .then(response => response.json())
             .then(data => {
