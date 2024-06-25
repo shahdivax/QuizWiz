@@ -24,6 +24,8 @@ from flask import Blueprint, jsonify, request, render_template, send_from_direct
 from app.utils import get_query_engine, initialize_index_for_bot
 import os
 import uuid
+# import logging
+# import traceback
 
 bp = Blueprint('main', __name__)
 
@@ -40,17 +42,35 @@ def index():
 
 @bp.route('/chat', methods=['POST'])
 def chat():
-    user_input = request.json['input']
-    print(user_input)
-    bot_id = request.json['botId']
-    print(bot_id)
     try:
+        data = request.json
+        # logging.info(f"Received data: {data}")  # Info log
+
+        if not data:
+            return jsonify({'error': 'No JSON data received'}), 400
+
+        user_input = data.get('input')
+        bot_id = data.get('botId')
+
+        # logging.info(f"Extracted input: {user_input}, botId: {bot_id}")  # Info log
+
+        if not user_input:
+            return jsonify({'error': 'No input provided'}), 400
+
+        if not bot_id:
+            return jsonify({'error': 'Bot ID is required'}), 400
+
         query_engine = get_query_engine(bot_id)
         response = query_engine.query(user_input)
-        print(response)
         return jsonify({'output': str(response)})
-    except FileNotFoundError:
-        return jsonify({'error': 'Bot not found'}), 404
+
+    except FileNotFoundError as e:
+        # logging.error(f"Bot not found: {str(e)}")
+        return jsonify({'error': f'Bot not found: {str(e)}'}), 404
+    except Exception as e:
+        # logging.error(f"Unexpected error: {str(e)}")
+        # logging.error(traceback.format_exc())  # Log the full traceback
+        return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
 
 
 @bp.route('/create-bot', methods=['POST'])

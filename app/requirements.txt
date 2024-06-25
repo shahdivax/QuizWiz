@@ -1,9 +1,0 @@
-llama-index
-llama-index-llms-gemini
-flask
-python-dotenv
-google-generativeai
-setuptools
-llama-index-vector-stores-mongodb
-flask_cors
-pymongo

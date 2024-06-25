@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,13 +19,13 @@
 <!--            botImageUrl: '{{ url_for("static", filename="images/chat-icon.png") }}'-->
 <!--        });-->
 <!--    </script>-->
-<!--        <script src="{{ url_for('static', filename='js/widget.js') }}"></script>-->
-        <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz/custombot/static/js/widget.js"></script>
+        <script src="{{ url_for('static', filename='js/widget.js') }}"></script>
+<!--        <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz/custombot/static/js/widget.js"></script>-->
         <script>
             CustomBot.init({
                 serverUrl: 'http://127.0.0.1:5000',
                 botName: 'Cat',
-                botImageUrl: '../bots/9908de69_2e47_42b2_be62_7ccf8c021952/images/9908de69_2e47_42b2_be62_7ccf8c021952_logo.png',
+                botImageUrl: 'custombot/bots/9908de69_2e47_42b2_be62_7ccf8c021952/images/9908de69_2e47_42b2_be62_7ccf8c021952_logo.png',
                 botId: '9908de69_2e47_42b2_be62_7ccf8c021952'
             });
         </script>

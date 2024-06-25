@@ -6,6 +6,7 @@
             this.botName = config.botName || 'Helper Bot';
             this.botImageUrl = config.botImageUrl || '/static/images/chat-icon.png';
             this.botId = config.botId;
+//            console.log(this.botId)
             this.createWidget();
             this.setupEventListeners();
         },
@@ -155,24 +156,45 @@
         },
 
         fetchResponse: function(message) {
+//            console.log('Sending request with botId:', this.botId); // Debug log
             fetch(`${this.serverUrl}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ input: message,
-                botId: this.botId })
+                body: JSON.stringify({
+                    input: message,
+                    botId: this.botId
+                })
             })
-            .then(response => response.json())
+            .then(response => {
+//                console.log('Response status:', response.status); // Debug log
+//                console.log('Response headers:', response.headers); // Debug log
+
+                // Check if the response is JSON
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    return response.json().catch(e => {
+                        throw new Error('Invalid JSON: ' + e.message);
+                    });
+                } else {
+                    // If it's not JSON, get the text content for debugging
+                    return response.text().then(text => {
+//                        console.error('Received non-JSON response:', text);
+                        throw new Error('Received non-JSON response from server');
+                    });
+                }
+            })
             .then(data => {
-                const botMessages = data.output;
+//                console.log('Received response:', data); // Debug log
+                const botMessages = Array.isArray(data.output) ? data.output : [data.output];
                 botMessages.forEach(botMessage => {
                     this.addMessageToChat(botMessage, 'bot');
                 });
             })
             .catch(error => {
-                console.error('Error:', error);
-                this.addMessageToChat('Sorry, I encountered an error. Please try again later.', 'bot');
+//                console.error('Error:', error);
+                this.addMessageToChat(`Error: ${error.message}. Please check the console for more details.`, 'bot');
             });
         }
     };
