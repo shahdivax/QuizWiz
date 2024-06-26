@@ -9,3 +9,4 @@ llama-index-vector-stores-mongodb
 pymongo
 python-dotenv
 uvicorn
+gunicorn
