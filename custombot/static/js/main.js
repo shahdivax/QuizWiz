@@ -110,7 +110,7 @@ botForm.addEventListener('submit', async (e) => {
 
         const embedCode = `
 <div id="custombot-container"></div>
-<script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz/custombot/static/js/widget.js"><\/script>
+<script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/widget.js"><\/script>
 <script>
     CustomBot.init({
         serverUrl: '${data.serverUrl}',
