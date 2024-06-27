@@ -5,7 +5,7 @@
                 throw new Error("Bot ID is required");
             }
             this.elementId = config.elementId || 'custombot-container';
-            this.serverUrl = config.serverUrl || 'http://localhost:5000';
+            this.serverUrl = config.serverUrl || 'http://127.0.0.1:10000';
             this.botName = config.botName || 'Helper Bot';
             this.botImageUrl = config.botImageUrl || '/static/images/chat-icon.png';
             this.botId = config.botId;
