@@ -7,7 +7,16 @@ themeToggle.addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
     moonIcon.classList.toggle('hidden');
     sunIcon.classList.toggle('hidden');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
 });
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    moonIcon.classList.toggle('hidden', savedTheme === 'dark');
+    sunIcon.classList.toggle('hidden', savedTheme === 'light');
+}
 
 // Logo preview
 const logoUpload = document.getElementById('logoUpload');
@@ -15,27 +24,54 @@ const logoPreview = document.getElementById('logoPreview');
 logoUpload.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
+        if (file.size > 10 * 1024 * 1024) {
+            showNotification('Logo file size must be less than 10MB', 'error');
+            logoUpload.value = '';
+            return;
+        }
         const reader = new FileReader();
         reader.onload = (e) => {
-            logoPreview.innerHTML = `<img src="${e.target.result}" alt="Logo preview" class="h-full w-full object-cover rounded-lg">`;
+            const imageData = e.target.result;
+            logoPreview.innerHTML = `<img src="${imageData}" alt="Logo preview" class="h-full w-full object-cover rounded-lg">`;
+            localStorage.setItem('logoPreview', imageData);
         };
         reader.readAsDataURL(file);
     }
 });
 
+// Load saved logo preview
+const savedLogoPreview = localStorage.getItem('logoPreview');
+if (savedLogoPreview) {
+    logoPreview.innerHTML = `<img src="${savedLogoPreview}" alt="Logo preview" class="h-full w-full object-cover rounded-lg">`;
+}
+
 // File upload and display
 const fileUpload = document.getElementById('fileUpload');
 const fileList = document.getElementById('fileList');
-const uploadedFiles = new Set();
+let uploadedFiles = new Set();
+
+// Load saved uploaded files
+const savedUploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles'));
+if (savedUploadedFiles) {
+    uploadedFiles = new Set(savedUploadedFiles);
+    uploadedFiles.forEach(fileName => {
+        displayFile({ name: fileName });
+    });
+}
 
 fileUpload.addEventListener('change', (event) => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
+        if (files[i].size > 10 * 1024 * 1024) {
+            showNotification(`File ${files[i].name} exceeds 10MB limit and was not added.`, 'error');
+            continue;
+        }
         if (!uploadedFiles.has(files[i].name)) {
             uploadedFiles.add(files[i].name);
             displayFile(files[i]);
         }
     }
+    saveUploadedFiles();
 });
 
 function displayFile(file) {
@@ -57,10 +93,30 @@ function displayFile(file) {
 function removeFile(fileName, listItem) {
     uploadedFiles.delete(fileName);
     listItem.remove();
-
-    // Clear the file input to allow re-uploading the same file
     fileUpload.value = '';
+    saveUploadedFiles();
 }
+
+function saveUploadedFiles() {
+    localStorage.setItem('uploadedFiles', JSON.stringify(Array.from(uploadedFiles)));
+}
+
+// Form fields
+const hostUrlInput = document.getElementById('hostUrl');
+const botNameInput = document.getElementById('botName');
+
+// Load saved form data
+hostUrlInput.value = localStorage.getItem('hostUrl') || 'https://quizwiz-mtcq.onrender.com/';
+botNameInput.value = localStorage.getItem('botName') || '';
+
+// Save form data on input
+hostUrlInput.addEventListener('input', () => {
+    localStorage.setItem('hostUrl', hostUrlInput.value);
+    if (hostUrlInput.value !== 'https://quizwiz-mtcq.onrender.com/') {
+        showNotification('Warning: Changing the host URL may affect bot functionality. Only change if you have your own server.', 'warning');
+    }
+});
+botNameInput.addEventListener('input', () => localStorage.setItem('botName', botNameInput.value));
 
 // Form submission
 const botForm = document.getElementById('botForm');
@@ -73,22 +129,19 @@ const notification = document.getElementById('notification');
 botForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Disable form fields and show progress
     disableFormFields(true);
     showProgress();
 
     const formData = new FormData(botForm);
 
-    // Add host URL, bot name, and files to formData
-    formData.append('hostUrl', document.getElementById('hostUrl').value);
-    formData.append('botName', document.getElementById('botName').value);
+    formData.append('hostUrl', hostUrlInput.value);
+    formData.append('botName', botNameInput.value);
 
-    const logoFile = document.getElementById('logoUpload').files[0];
+    const logoFile = logoUpload.files[0];
     if (logoFile) {
         formData.append('logoUpload', logoFile);
     }
 
-    // Append all uploaded files to formData
     uploadedFiles.forEach(fileName => {
         const file = Array.from(fileUpload.files).find(f => f.name === fileName);
         if (file) {
@@ -123,16 +176,24 @@ botForm.addEventListener('submit', async (e) => {
 
         snippet.textContent = embedCode;
         snippetContainer.classList.remove('hidden');
+        localStorage.setItem('generatedSnippet', embedCode);
         showNotification('Bot created successfully!');
+        showBrowserNotification('Your bot is ready!');
     } catch (error) {
         console.error('Error creating bot:', error);
         showNotification('An error occurred while creating the bot. Please try again.', 'error');
     } finally {
-        // Re-enable form fields and hide progress
         disableFormFields(false);
         hideProgress();
     }
 });
+
+// Load saved generated snippet
+const savedSnippet = localStorage.getItem('generatedSnippet');
+if (savedSnippet) {
+    snippet.textContent = savedSnippet;
+    snippetContainer.classList.remove('hidden');
+}
 
 copySnippet.addEventListener('click', () => {
     navigator.clipboard.writeText(snippet.textContent.trim()).then(() => {
@@ -168,10 +229,37 @@ function hideProgress() {
 
 function showNotification(message, type = 'success') {
     notification.textContent = message;
-    notification.classList.remove('hidden', 'bg-green-500', 'bg-red-500');
-    notification.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
+    notification.classList.remove('hidden', 'bg-green-500', 'bg-red-500', 'bg-yellow-500');
+    notification.classList.add(type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-yellow-500');
     notification.classList.remove('hidden');
     setTimeout(() => {
         notification.classList.add('hidden');
-    }, 3000);
+    }, 5000);
 }
+
+function showBrowserNotification(message) {
+    if (Notification.permission === "granted") {
+        new Notification("QuizWiz Bot Generator", { body: message });
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                new Notification("QuizWiz Bot Generator", { body: message });
+            }
+        });
+    }
+}
+
+// Request notification permission when the page loads
+window.addEventListener('load', () => {
+    if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+    }
+});
+
+// Add warning about closing the tab
+window.addEventListener('beforeunload', (event) => {
+    if (generateButton.disabled) {
+        event.preventDefault();
+        event.returnValue = '';
+    }
+});
