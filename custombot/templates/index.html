@@ -8,15 +8,17 @@
 <body>
     <h1>Welcome to CustomBot Demo</h1>
     <p>This is a demo page for CustomBot. The chat widget should appear in the bottom right corner.</p>
-<div id="custombot-container"></div>
-<script src="{{ url_for('static', filename='js/widget.js') }}"></script>
-<script>
-    CustomBot.init({
-        serverUrl: 'http://localhost:5000',
-        botName: 'wonder3D helper',
-        botImageUrl: 'https://res.cloudinary.com/djc2l2zjr/image/upload/v1719309562/4de88c10_9062_4f52_a726_c0d88461e5fc_logo.png',
-        botId: '4de88c10_9062_4f52_a726_c0d88461e5fc'
-    });
-</script>
+<div id="quantum-realm-communicator-container"></div>
+
+<div id="neural-nexus-container"></div>
+                <script src="{{ url_for('static', filename='js/neural-nexus-widget.js') }}"></script>
+                <script>
+                    NeuralNexusWidget.init({
+                        serverUrl: 'http://192.168.0.135:10000',
+                        botName: 'Cat',
+                        botImageUrl: 'https://res.cloudinary.com/djc2l2zjr/image/upload/v1719572021/86f78322_d9c5_40e9_a0d3_7d58fc946ed4_logo.png',
+                        botId: '86f78322_d9c5_40e9_a0d3_7d58fc946ed4'
+                    });
+                </script>
 </body>
 </html>
