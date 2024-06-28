@@ -104,10 +104,12 @@ function saveUploadedFiles() {
 // Form fields
 const hostUrlInput = document.getElementById('hostUrl');
 const botNameInput = document.getElementById('botName');
+const themeSelect = document.getElementById('themeSelect');
 
 // Load saved form data
 hostUrlInput.value = localStorage.getItem('hostUrl') || 'https://quizwiz-mtcq.onrender.com/';
 botNameInput.value = localStorage.getItem('botName') || '';
+themeSelect.value = localStorage.getItem('selectedTheme') || 'default';
 
 // Save form data on input
 hostUrlInput.addEventListener('input', () => {
@@ -117,6 +119,10 @@ hostUrlInput.addEventListener('input', () => {
     }
 });
 botNameInput.addEventListener('input', () => localStorage.setItem('botName', botNameInput.value));
+themeSelect.addEventListener('change', () => {
+    localStorage.setItem('selectedTheme', themeSelect.value);
+    updateSnippet();
+});
 
 // Form submission
 const botForm = document.getElementById('botForm');
@@ -136,6 +142,7 @@ botForm.addEventListener('submit', async (e) => {
 
     formData.append('hostUrl', hostUrlInput.value);
     formData.append('botName', botNameInput.value);
+    formData.append('theme', themeSelect.value);
 
     const logoFile = logoUpload.files[0];
     if (logoFile) {
@@ -161,22 +168,7 @@ botForm.addEventListener('submit', async (e) => {
 
         const data = await response.json();
 
-        const embedCode = `
-<div id="custombot-container"></div>
-<script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/widget.js"><\/script>
-<script>
-    CustomBot.init({
-        serverUrl: '${data.serverUrl}',
-        botName: '${data.botName}',
-        botImageUrl: '${data.botImageUrl}',
-        botId: '${data.botId}'
-    });
-<\/script>
-`;
-
-        snippet.textContent = embedCode;
-        snippetContainer.classList.remove('hidden');
-        localStorage.setItem('generatedSnippet', embedCode);
+        updateSnippet(data);
         showNotification('Bot created successfully!');
         showBrowserNotification('Your bot is ready!');
     } catch (error) {
@@ -187,6 +179,106 @@ botForm.addEventListener('submit', async (e) => {
         hideProgress();
     }
 });
+
+function updateSnippet(data = null) {
+    const selectedTheme = themeSelect.value;
+    const botId = data ? data.botId : localStorage.getItem('botId');
+    const serverUrl = data ? data.serverUrl : hostUrlInput.value;
+    const botName = data ? data.botName : botNameInput.value;
+    const botImageUrl = data ? data.botImageUrl : localStorage.getItem('logoPreview');
+
+    let snippetCode;
+
+    switch(selectedTheme) {
+        case 'neural-nexus':
+            snippetCode = `
+                <div id="neural-nexus-container"></div>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/neural-nexus-widget.js"></script>
+                <script>
+                    NeuralNexusWidget.init({
+                        serverUrl: '${serverUrl}',
+                        botName: '${botName}',
+                        botImageUrl: '${botImageUrl}',
+                        botId: '${botId}'
+                    });
+                </script>
+            `;
+            break;
+        case 'quantum-realm':
+            snippetCode = `
+                <div id="quantum-realm-communicator-container"></div>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/quantum-realm-communicator.js"></script>
+                <script>
+                    QuantumRealmCommunicator.init({
+                        serverUrl: '${serverUrl}',
+                        botName: '${botName}',
+                        botImageUrl: '${botImageUrl}',
+                        botId: '${botId}'
+                    });
+                </script>
+            `;
+            break;
+        case 'interdimensional-portal':
+            snippetCode = `
+                <div id="interdimensional-portal-container"></div>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/interdimensional-portal-widget.js"></script>
+                <script>
+                    InterdimensionalPortalWidget.init({
+                        serverUrl: '${serverUrl}',
+                        botName: '${botName}',
+                        botImageUrl: '${botImageUrl}',
+                        botId: '${botId}'
+                    });
+                </script>
+            `;
+            break;
+        case 'floating-islands':
+            snippetCode = `
+                <div id="floatingislands-container"></div>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/floating-islands-widget.js"></script>
+                <script>
+                    FloatingIslandsChat.init({
+                        serverUrl: '${serverUrl}',
+                        botName: '${botName}',
+                        botImageUrl: '${botImageUrl}',
+                        botId: '${botId}'
+                    });
+                </script>
+            `;
+            break;
+        case 'ethereal-whisper':
+            snippetCode = `
+                <div id="ethereal-whisper-chat-container"></div>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/ethereal-whisper-chat.js"></script>
+                <script>
+                    EtherealWhisperChat.init({
+                        serverUrl: '${serverUrl}',
+                        botName: '${botName}',
+                        botImageUrl: '${botImageUrl}',
+                        botId: '${botId}'
+                    });
+                </script>
+            `;
+            break;
+        default:
+            snippetCode = `
+                <div id="custombot-container"></div>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/widget.js"></script>
+                <script>
+                    CustomBot.init({
+                        serverUrl: '${serverUrl}',
+                        botName: '${botName}',
+                        botImageUrl: '${botImageUrl}',
+                        botId: '${botId}'
+                    });
+                </script>
+            `;
+    }
+
+    snippet.textContent = snippetCode;
+    snippetContainer.classList.remove('hidden');
+    localStorage.setItem('generatedSnippet', snippetCode);
+}
 
 // Load saved generated snippet
 const savedSnippet = localStorage.getItem('generatedSnippet');
@@ -262,4 +354,12 @@ window.addEventListener('beforeunload', (event) => {
         event.preventDefault();
         event.returnValue = '';
     }
+});
+
+// Demo link functionality
+const demoLink = document.getElementById('demoLink');
+demoLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    const demoUrl = 'https://example.com/quizwiz-demo'; // Replace with your actual demo URL
+    window.open(demoUrl, '_blank');
 });

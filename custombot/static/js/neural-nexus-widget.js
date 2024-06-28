@@ -7,6 +7,7 @@
             this.elementId = config.elementId || 'neural-nexus-container';
             this.serverUrl = config.serverUrl || 'http://127.0.0.1:10000';
             this.botName = config.botName || 'Neural Nexus';
+            this.botImageUrl = config.botImageUrl || '/static/images/island-bot.png';
             this.botId = config.botId;
             this.createWidget();
             this.setupEventListeners();
@@ -21,9 +22,9 @@
 
             container.innerHTML = `
                 <div class="neural-nexus-widget">
-                    <button class="chat-toggle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brain-icon"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path></svg>
-                    </button>
+                    <div class="chat-toggle">
+                        <img src="${this.botImageUrl}" alt="Bot">
+                    </div>
                     <div class="chat-ui" style="display: none;">
                         <div class="chat-header">
                             <span>${this.botName}</span>
@@ -66,6 +67,12 @@
                     justify-content: center;
                     transition: all 0.3s;
                 }
+                .chat-toggle img {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                }
+
                 .chat-toggle:hover {
                     background: linear-gradient(to right, #4338ca, #6b21a8, #db2777);
                 }
@@ -81,8 +88,8 @@
                     100% { transform: scale(1); }
                 }
                 .chat-ui {
-                    width: 384px;
-                    height: 448px;
+                    width: 320px;
+                    height: 400px;
                     background: linear-gradient(to bottom right, #312e81, #4c1d95, #701a75);
                     border-radius: 8px;
                     overflow: hidden;
@@ -109,7 +116,7 @@
                     color: #93c5fd;
                 }
                 .chat-messages {
-                    height: 320px;
+                    height: 255px;
                     overflow-y: auto;
                     padding: 16px;
                     display: flex;
