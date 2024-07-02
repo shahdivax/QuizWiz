@@ -360,6 +360,6 @@ window.addEventListener('beforeunload', (event) => {
 const demoLink = document.getElementById('demoLink');
 demoLink.addEventListener('click', (e) => {
     e.preventDefault();
-    const demoUrl = 'https://example.com/quizwiz-demo'; // Replace with your actual demo URL
+    const demoUrl = 'https://quiz-wiz-official.vercel.app/#demo'; // Replace with your actual demo URL
     window.open(demoUrl, '_blank');
 });
