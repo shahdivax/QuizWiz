@@ -11,12 +11,12 @@ themeToggle.addEventListener('click', () => {
 });
 
 // Load saved theme
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    moonIcon.classList.toggle('hidden', savedTheme === 'dark');
-    sunIcon.classList.toggle('hidden', savedTheme === 'light');
-}
+//const savedTheme = localStorage.getItem('theme');
+//if (savedTheme) {
+//    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+//    moonIcon.classList.toggle('hidden', savedTheme === 'dark');
+//    sunIcon.classList.toggle('hidden', savedTheme === 'light');
+//}
 
 // Logo preview
 const logoUpload = document.getElementById('logoUpload');
@@ -40,10 +40,10 @@ logoUpload.addEventListener('change', (event) => {
 });
 
 // Load saved logo preview
-const savedLogoPreview = localStorage.getItem('logoPreview');
-if (savedLogoPreview) {
-    logoPreview.innerHTML = `<img src="${savedLogoPreview}" alt="Logo preview" class="h-full w-full object-cover rounded-lg">`;
-}
+//const savedLogoPreview = localStorage.getItem('logoPreview');
+//if (savedLogoPreview) {
+//    logoPreview.innerHTML = `<img src="${savedLogoPreview}" alt="Logo preview" class="h-full w-full object-cover rounded-lg">`;
+//}
 
 // File upload and display
 const fileUpload = document.getElementById('fileUpload');
@@ -51,13 +51,13 @@ const fileList = document.getElementById('fileList');
 let uploadedFiles = new Set();
 
 // Load saved uploaded files
-const savedUploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles'));
-if (savedUploadedFiles) {
-    uploadedFiles = new Set(savedUploadedFiles);
-    uploadedFiles.forEach(fileName => {
-        displayFile({ name: fileName });
-    });
-}
+//const savedUploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles'));
+//if (savedUploadedFiles) {
+//    uploadedFiles = new Set(savedUploadedFiles);
+//    uploadedFiles.forEach(fileName => {
+//        displayFile({ name: fileName });
+//    });
+//}
 
 fileUpload.addEventListener('change', (event) => {
     const files = event.target.files;
@@ -107,9 +107,9 @@ const botNameInput = document.getElementById('botName');
 const themeSelect = document.getElementById('themeSelect');
 
 // Load saved form data
-hostUrlInput.value = localStorage.getItem('hostUrl') || 'https://quizwiz-mtcq.onrender.com/';
-botNameInput.value = localStorage.getItem('botName') || '';
-themeSelect.value = localStorage.getItem('selectedTheme') || 'default';
+//hostUrlInput.value = localStorage.getItem('hostUrl') || 'https://quizwiz-mtcq.onrender.com/';
+//botNameInput.value = localStorage.getItem('botName') || '';
+//themeSelect.value = localStorage.getItem('selectedTheme') || 'default';
 
 // Save form data on input
 hostUrlInput.addEventListener('input', () => {
