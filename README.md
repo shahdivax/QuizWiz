@@ -1,41 +1,203 @@
 # QuizWiz
 
-## Revolutionizing Customer Interaction with AI-Powered Chat Widgets
+QuizWiz is an advanced, AI-powered chatbot creation platform that enables users to build, deploy, and interact with custom chatbots. Leveraging cutting-edge natural language processing technologies, QuizWiz offers a user-friendly interface for creating intelligent conversational agents tailored to specific domains or purposes.
 
-QuizWiz is a cutting-edge, AI-powered chat widget solution designed to transform the way businesses interact with their customers online. By leveraging advanced natural language processing and machine learning technologies, QuizWiz provides an intuitive, efficient, and highly customizable chatbot experience that can be easily integrated into any website.
+## Table of Contents
+1. [Features](#features)
+2. [Demo](#demo)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
+5. [Configuration](#configuration)
+6. [Usage](#usage)
+7. [Project Structure](#project-structure)
+8. [Technologies Used](#technologies-used)
+9. [API Reference](#api-reference)
+10. [Deployment](#deployment)
+11. [Contributing](#contributing)
+12. [Support](#support)
+13. [License](#license)
 
-### Key Features
+## Features
 
-- **Seamless Integration**: Embed QuizWiz into your website with just a few lines of code.
-- **AI-Powered Responses**: Utilizes state-of-the-art language models to provide intelligent and context-aware responses.
-- **Customizable Appearance**: Easily adapt the chat widget to match your brand's look and feel.
-- **Scalable Architecture**: Built on a robust Flask backend, QuizWiz is designed to handle high volumes of concurrent users.
-- **Real-time Interaction**: Provides instant responses to user queries, enhancing customer satisfaction.
+- **Custom Chatbot Creation**: Design chatbots with unique personalities and knowledge bases.
+- **Document Processing**: Upload and process various document types (PDF, TXT, DOCX, etc.) to train your chatbot.
+- **Web-based Interface**: User-friendly interface for bot creation and interaction.
+- **Advanced AI Integration**: Utilizes state-of-the-art AI models for natural language understanding and generation.
+- **Scalable Architecture**: Built on PostgreSQL for efficient data storage and retrieval.
+- **Cloud Integration**: Seamless integration with Cloudinary for image and file management.
+- **Customizable Responses**: Fine-tune your chatbot's responses for specific use cases.
+- **Multi-language Support**: Create chatbots in various languages.
+- **Analytics Dashboard**: Track chatbot performance and user interactions.
 
-### Why QuizWiz?
+## Demo
 
-In today's fast-paced digital landscape, providing immediate and accurate customer support is crucial. QuizWiz sets a new industry standard by offering:
+- **Free Usage**: Experience QuizWiz in action at [https://quizwiz-mtcq.onrender.com/](https://quizwiz-mtcq.onrender.com/)
+- **Official Website**: Learn more about QuizWiz at [https://quiz-wiz-official.vercel.app/](https://quiz-wiz-official.vercel.app/)
 
-1. **Improved Customer Experience**: 24/7 availability ensures that your customers always have access to support.
-2. **Reduced Operational Costs**: Automate routine inquiries, allowing your human support team to focus on complex issues.
-3. **Data-Driven Insights**: Gain valuable insights into customer needs and preferences through conversation analytics.
-4. **Easy Deployment**: With our straightforward setup process, you can have QuizWiz up and running in minutes.
+## Prerequisites
 
-### Getting Started
+Ensure you have the following installed:
+- Python 3.8+
+- PostgreSQL 12+
+- Node.js 14+ (for frontend development)
+- Git
 
-To integrate QuizWiz into your website, simply include our JavaScript widget and initialize it with your custom configuration. Our comprehensive documentation provides step-by-step instructions for setup and customization.
+## Installation
 
-### Future Developments
+1. Clone the repository:
+   ```
+   git clone https://github.com/shahdivax/QuizWiz.git
+   cd QuizWiz/custombot
+   ```
 
-We are committed to continuously improving QuizWiz. Upcoming features include:
-- Multi-language support
-- Integration with popular CRM systems
-- Advanced analytics dashboard
+2. Set up a Python virtual environment:
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
 
-Join us in revolutionizing customer interaction. With QuizWiz, the future of customer support is here today.
+3. Install required Python packages:
+   ```
+   pip install -r requirements.txt
+   ```
 
----
+4. Set up the PostgreSQL database:
+   ```
+   createdb quizwiz_bot_data
+   ```
 
-For more information, documentation, and support, visit our [official website](https://quiz-wiz-official.vercel.app/).
+5. Install frontend dependencies (if applicable):
+   ```
+   cd frontend
+   npm install
+   ```
 
-QuizWiz - Empowering businesses with intelligent conversation.
+## Configuration
+
+1. Create a `.env` file in the root directory with the following variables:
+   ```
+   POSTGRESQL_URI=postgresql://username:password@localhost:5432/quizwiz_bot_data
+   CLOUDINARY_NAME=your_cloudinary_name
+   CLOUDINARY_API=your_cloudinary_api_key
+   CLOUDINARY_SECRET=your_cloudinary_secret
+   FLASK_SECRET_KEY=your_secret_key
+   AI_MODEL_API_KEY=your_ai_model_api_key
+   ```
+
+2. Update `config.py` with any additional settings specific to your deployment.
+
+## Usage
+
+### Running the Application
+
+1. Start the Flask development server:
+   ```
+   python run.py
+   ```
+
+2. Access the QuizWiz interface at `http://localhost:5000`
+
+### Creating a Chatbot
+
+1. Navigate to the "Create Bot" page.
+2. Provide a name and description for your chatbot.
+3. Upload a logo (optional).
+4. Upload training documents (PDF, TXT, DOCX, etc.).
+5. Configure any additional settings (language, response style, etc.).
+6. Click "Create Bot" to generate your custom chatbot.
+
+### Interacting with Your Chatbot
+
+1. Go to the chat interface.
+2. Select your chatbot from the list of available bots.
+3. Start chatting! Your bot will respond based on its training.
+
+### Managing Your Chatbots
+
+1. Access the bot management dashboard.
+2. View analytics, update training data, and adjust settings for your bots.
+
+## Project Structure
+
+```
+QuizWiz/
+├── custombot/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── models.py
+│   │   ├── routes.py
+│   │   └── utils.py
+│   ├── bots/
+│   ├── data/
+│   ├── static/
+│   │   ├── css/
+│   │   ├── images/
+│   │   └── js/
+│   ├── templates/
+│   │   ├── home.html
+│   │   └── index.html
+│   ├── tests/
+│   ├── .env
+│   ├── config.py
+│   ├── requirements.txt
+│   └── run.py
+├── frontend/  # If separate frontend exists
+│   ├── src/
+│   ├── public/
+│   └── package.json
+├── docs/
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
+## Technologies Used
+
+- **Backend**: Flask, SQLAlchemy, psycopg2
+- **Database**: PostgreSQL
+- **AI/ML**: LlamaIndex, Gemini Embedding, Gemini LLM
+- **Frontend**: HTML, CSS, JavaScript (potentially React or Vue.js)
+- **Cloud Services**: Cloudinary, Render (for deployment)
+- **Version Control**: Git
+
+## API Reference
+
+Document your API endpoints here, for example:
+
+- `POST /api/create-bot`: Create a new chatbot
+- `GET /api/bots`: List all chatbots
+- `POST /api/chat`: Send a message to a chatbot
+
+Refer to the full API documentation for detailed information on request/response formats.
+
+## Deployment
+
+QuizWiz is deployed on Render. To deploy your own instance:
+
+1. Create a Render account and set up a new Web Service.
+2. Connect your GitHub repository to Render.
+3. Configure environment variables in Render dashboard.
+4. Deploy the application.
+
+For detailed deployment instructions, refer to the [Deployment Guide](docs/deployment.md).
+
+## Contributing
+
+We welcome contributions to QuizWiz! Please follow these steps:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/AmazingFeature`)
+3. Make your changes
+4. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## Support
+
+For support, please open an issue in the GitHub repository or contact our support team at support@quizwiz.com.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
