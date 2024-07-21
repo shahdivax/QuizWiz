@@ -60,6 +60,21 @@ def create_bot():
     bot_logo = request.files.get('logoUpload')
     documents = request.files.getlist('fileUpload')
 
+    # Check number of files
+    if len(documents) > 3:
+        return jsonify({'error': 'Maximum 3 files allowed'}), 400
+
+    # Check total context size (assuming 1 byte = 1 character for simplicity)
+    total_context_size = 0
+    MAX_CONTEXT_SIZE = 100000  # 100,000 characters (about 50 pages of text)
+
+    for doc in documents:
+        total_context_size += len(doc.read())
+        doc.seek(0)  # Reset file pointer
+
+    if total_context_size > MAX_CONTEXT_SIZE:
+        return jsonify({'error': 'Total context size exceeds the limit'}), 400
+
     bot_id = str(uuid.uuid4()).replace('-', '_')
     bot_dir = os.path.join('bots', bot_id)
     os.makedirs(bot_dir, exist_ok=True)
