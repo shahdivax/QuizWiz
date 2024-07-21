@@ -11,12 +11,12 @@ themeToggle.addEventListener('click', () => {
 });
 
 // Load saved theme
-//const savedTheme = localStorage.getItem('theme');
-//if (savedTheme) {
-//    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-//    moonIcon.classList.toggle('hidden', savedTheme === 'dark');
-//    sunIcon.classList.toggle('hidden', savedTheme === 'light');
-//}
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    moonIcon.classList.toggle('hidden', savedTheme === 'dark');
+    sunIcon.classList.toggle('hidden', savedTheme === 'light');
+}
 
 // Logo preview
 const logoUpload = document.getElementById('logoUpload');
@@ -40,10 +40,10 @@ logoUpload.addEventListener('change', (event) => {
 });
 
 // Load saved logo preview
-//const savedLogoPreview = localStorage.getItem('logoPreview');
-//if (savedLogoPreview) {
-//    logoPreview.innerHTML = `<img src="${savedLogoPreview}" alt="Logo preview" class="h-full w-full object-cover rounded-lg">`;
-//}
+const savedLogoPreview = localStorage.getItem('logoPreview');
+if (savedLogoPreview) {
+    logoPreview.innerHTML = `<img src="${savedLogoPreview}" alt="Logo preview" class="h-full w-full object-cover rounded-lg">`;
+}
 
 // File upload and display
 const fileUpload = document.getElementById('fileUpload');
@@ -53,13 +53,13 @@ const MAX_FILES = 3;
 const MAX_CONTEXT_SIZE = 1000000; // 100,000 characters (about 50 pages of text)
 let totalContextSize = 0;
 // Load saved uploaded files
-//const savedUploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles'));
-//if (savedUploadedFiles) {
-//    uploadedFiles = new Set(savedUploadedFiles);
-//    uploadedFiles.forEach(fileName => {
-//        displayFile({ name: fileName });
-//    });
-//}
+const savedUploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles'));
+if (savedUploadedFiles) {
+    uploadedFiles = new Set(savedUploadedFiles);
+    uploadedFiles.forEach(fileName => {
+        displayFile({ name: fileName });
+    });
+}
 
 fileUpload.addEventListener('change', (event) => {
     const files = event.target.files;
@@ -172,9 +172,9 @@ const botNameInput = document.getElementById('botName');
 const themeSelect = document.getElementById('themeSelect');
 
 // Load saved form data
-//hostUrlInput.value = localStorage.getItem('hostUrl') || 'https://quizwiz-mtcq.onrender.com/';
-//botNameInput.value = localStorage.getItem('botName') || '';
-//themeSelect.value = localStorage.getItem('selectedTheme') || 'default';
+hostUrlInput.value = localStorage.getItem('hostUrl') || 'https://quizwiz-mtcq.onrender.com/';
+botNameInput.value = localStorage.getItem('botName') || '';
+themeSelect.value = localStorage.getItem('selectedTheme') || 'default';
 
 // Save form data on input
 hostUrlInput.addEventListener('input', () => {
@@ -197,6 +197,10 @@ const generateButton = document.getElementById('generateButton');
 const copySnippet = document.getElementById('copySnippet');
 const notification = document.getElementById('notification');
 
+// Add a session flag
+let botGeneratedThisSession = false;
+
+// Modify the form submission handler
 botForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -233,6 +237,16 @@ botForm.addEventListener('submit', async (e) => {
 
         const data = await response.json();
 
+        // Save the bot details
+        localStorage.setItem('botId', data.botId);
+        localStorage.setItem('botImageUrl', data.botImageUrl);
+        localStorage.setItem('botName', data.botName);
+        localStorage.setItem('hostUrl', data.serverUrl);
+
+        // Set the session flag
+        sessionStorage.setItem('botGeneratedThisSession', 'true');
+        botGeneratedThisSession = true;
+
         updateSnippet(data);
         showNotification('Bot created successfully!');
         showBrowserNotification('Your bot is ready!');
@@ -250,7 +264,7 @@ function updateSnippet(data = null) {
     const botId = data ? data.botId : localStorage.getItem('botId');
     const serverUrl = data ? data.serverUrl : hostUrlInput.value;
     const botName = data ? data.botName : botNameInput.value;
-    const botImageUrl = data ? data.botImageUrl : localStorage.getItem('logoPreview');
+    const botImageUrl = data ? data.botImageUrl : localStorage.getItem('botImageUrl');
 
     let snippetCode;
 
@@ -406,8 +420,60 @@ function showBrowserNotification(message) {
     }
 }
 
-// Request notification permission when the page loads
+// Modify the page load handler
 window.addEventListener('load', () => {
+    // Check if a bot was generated this session
+    botGeneratedThisSession = sessionStorage.getItem('botGeneratedThisSession') === 'true';
+
+    if (botGeneratedThisSession) {
+        // Load saved form data
+        hostUrlInput.value = localStorage.getItem('hostUrl') || 'https://quizwiz-mtcq.onrender.com/';
+        botNameInput.value = localStorage.getItem('botName') || '';
+        themeSelect.value = localStorage.getItem('selectedTheme') || 'default';
+
+        // Load saved logo preview
+        const savedLogoPreview = localStorage.getItem('logoPreview');
+        if (savedLogoPreview) {
+            logoPreview.innerHTML = `<img src="${savedLogoPreview}" alt="Logo preview" class="h-full w-full object-cover rounded-lg">`;
+        }
+
+        // Load saved uploaded files
+        const savedUploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles'));
+        if (savedUploadedFiles) {
+            uploadedFiles = new Set(savedUploadedFiles);
+            uploadedFiles.forEach(fileName => {
+                displayFile({ name: fileName });
+            });
+        }
+
+        // Load saved generated snippet
+        const savedSnippet = localStorage.getItem('generatedSnippet');
+        if (savedSnippet) {
+            snippet.textContent = savedSnippet;
+            snippetContainer.classList.remove('hidden');
+        }
+    } else {
+        // Clear all saved data
+        localStorage.removeItem('botId');
+        localStorage.removeItem('botImageUrl');
+        localStorage.removeItem('botName');
+        localStorage.removeItem('hostUrl');
+        localStorage.removeItem('logoPreview');
+        localStorage.removeItem('uploadedFiles');
+        localStorage.removeItem('generatedSnippet');
+
+        // Reset form fields
+        hostUrlInput.value = 'https://quizwiz-mtcq.onrender.com/';
+        botNameInput.value = '';
+        themeSelect.value = 'default';
+        logoPreview.innerHTML = '';
+        fileList.innerHTML = '';
+        uploadedFiles.clear();
+        snippet.textContent = '';
+        snippetContainer.classList.add('hidden');
+    }
+
+    // Request notification permission
     if (Notification.permission !== "granted" && Notification.permission !== "denied") {
         Notification.requestPermission();
     }
