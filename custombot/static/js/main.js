@@ -49,7 +49,9 @@ if (savedLogoPreview) {
 const fileUpload = document.getElementById('fileUpload');
 const fileList = document.getElementById('fileList');
 let uploadedFiles = new Set();
-
+const MAX_FILES = 3;
+const MAX_CONTEXT_SIZE = 1000000; // 100,000 characters (about 50 pages of text)
+let totalContextSize = 0;
 // Load saved uploaded files
 const savedUploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles'));
 if (savedUploadedFiles) {
@@ -61,18 +63,81 @@ if (savedUploadedFiles) {
 
 fileUpload.addEventListener('change', (event) => {
     const files = event.target.files;
+    if (uploadedFiles.size + files.length > MAX_FILES) {
+        showNotification(`Maximum ${MAX_FILES} files allowed.`, 'error');
+        fileUpload.value = '';
+        return;
+    }
+
+    let newContextSize = 0;
+    const fileReadPromises = [];
+
     for (let i = 0; i < files.length; i++) {
         if (files[i].size > 10 * 1024 * 1024) {
             showNotification(`File ${files[i].name} exceeds 10MB limit and was not added.`, 'error');
             continue;
         }
-        if (!uploadedFiles.has(files[i].name)) {
-            uploadedFiles.add(files[i].name);
-            displayFile(files[i]);
-        }
+
+        const fileReadPromise = new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                newContextSize += e.target.result.length;
+                resolve();
+            };
+            reader.readAsText(files[i]);
+        });
+
+        fileReadPromises.push(fileReadPromise);
     }
-    saveUploadedFiles();
+
+    Promise.all(fileReadPromises).then(() => {
+        if (totalContextSize + newContextSize > MAX_CONTEXT_SIZE) {
+            showNotification('Total context size exceeds the limit. Please remove some files or reduce their content.', 'error');
+            fileUpload.value = '';
+            return;
+        }
+
+        totalContextSize += newContextSize;
+
+        for (let i = 0; i < files.length; i++) {
+            if (!uploadedFiles.has(files[i].name)) {
+                uploadedFiles.add(files[i].name);
+                displayFile(files[i]);
+            }
+        }
+        saveUploadedFiles();
+    });
 });
+
+function removeFile(fileName, listItem) {
+    uploadedFiles.delete(fileName);
+    listItem.remove();
+    fileUpload.value = '';
+
+    // Recalculate total context size
+    totalContextSize = 0;
+    const fileReadPromises = [];
+
+    uploadedFiles.forEach(fileName => {
+        const file = Array.from(fileUpload.files).find(f => f.name === fileName);
+        if (file) {
+            const fileReadPromise = new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    totalContextSize += e.target.result.length;
+                    resolve();
+                };
+                reader.readAsText(file);
+            });
+            fileReadPromises.push(fileReadPromise);
+        }
+    });
+
+    Promise.all(fileReadPromises).then(() => {
+        saveUploadedFiles();
+    });
+}
+
 
 function displayFile(file) {
     const li = document.createElement('li');
