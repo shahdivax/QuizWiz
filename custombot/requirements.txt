@@ -10,3 +10,4 @@ pymongo
 python-dotenv
 uvicorn
 gunicorn
+openpyxl
