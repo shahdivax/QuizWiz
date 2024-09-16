@@ -32,7 +32,11 @@ QuizWiz is an advanced, AI-powered chatbot creation platform that enables users 
 - **Analytics Dashboard**: Track chatbot performance and user interactions.
 
 ## UI Images
-![image](https://github.com/shahdivax/QuizWiz_Deprecated/blob/main/Images/UI%20(1).png?raw=true)
+<div style="display: flex; justify-content: space-around;">
+  <img src="https://github.com/shahdivax/QuizWiz_Deprecated/blob/main/Images/UI%20(1).png?raw=true" alt="UI Image 1" style="width: 45%;"/>
+  <img src="https://github.com/shahdivax/QuizWiz_Deprecated/blob/main/Images/UI%20(2).png?raw=true" alt="UI Image 2" style="width: 45%;"/>
+</div>
+
 
 ## Demo
 
