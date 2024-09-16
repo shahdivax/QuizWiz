@@ -1,0 +1,13 @@
+cloudinary
+llama-index
+flask
+flask-cors
+llama-index-llms-gemini
+google-generativeai
+llama-index-vector-stores-postgres
+llama-index-vector-stores-mongodb
+pymongo
+python-dotenv
+uvicorn
+gunicorn
+openpyxl

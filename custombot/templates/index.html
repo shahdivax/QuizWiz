@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CustomBot Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Welcome to CustomBot Demo</h1>
+    <p>This is a demo page for CustomBot. The chat widget should appear in the bottom right corner.</p>
+<div id="quantum-realm-communicator-container"></div>
+
+<div id="neural-nexus-container"></div>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/QuizWiz@master/custombot/static/js/neural-nexus-widget.js"></script>
+                <script>
+                    CustomBot.init({
+                        serverUrl: 'SERVER_URL',
+                        botName: 'BOT_NAME',
+                        botImageUrl: 'BOT_IMAGE_URL',
+                        botId: 'BOT_ID'
+                    });
+                </script>
+</body>
+</html>
