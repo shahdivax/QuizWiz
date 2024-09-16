@@ -33,7 +33,7 @@ QuizWiz is an advanced, AI-powered chatbot creation platform that enables users 
 
 ## Demo
 
-- **Free Usage**: Experience QuizWiz in action at [https://quizwiz-mtcq.onrender.com/](https://quizwiz-mtcq.onrender.com/)
+- **Free Usage**: Experience QuizWiz in action at [https://quizwiz-mtcq.onrender.com/](https://quizwiz-mtcq.onrender.com/) (No Longer Supported)
 - **Official Website**: Learn more about QuizWiz at [https://quiz-wiz-official.vercel.app/](https://quiz-wiz-official.vercel.app/)
 
 ## Prerequisites
