@@ -31,6 +31,9 @@ QuizWiz is an advanced, AI-powered chatbot creation platform that enables users 
 - **Multi-language Support**: Create chatbots in various languages.
 - **Analytics Dashboard**: Track chatbot performance and user interactions.
 
+## UI Images
+![image](https://github.com/shahdivax/QuizWiz_Deprecated/blob/main/Images/UI%20(1).png?raw=true)
+
 ## Demo
 
 - **Free Usage**: Experience QuizWiz in action at [https://quizwiz-mtcq.onrender.com/](https://quizwiz-mtcq.onrender.com/) (No Longer Supported)
