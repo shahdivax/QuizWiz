@@ -1,14 +1,16 @@
-cloudinary
-llama-index
+# /* Uncomment the all the comments and lines when running locally */
+
+# cloudinary
+# llama-index
 flask
 flask-cors
-llama-index-llms-mistralai
-llama-index-embeddings-mistralai
-mistralai
-llama-index-vector-stores-postgres
-llama-index-vector-stores-mongodb
-pymongo
+# llama-index-llms-mistralai
+# llama-index-embeddings-mistralai
+# mistralai
+# llama-index-vector-stores-postgres
+# llama-index-vector-stores-mongodb
+# pymongo
 python-dotenv
 uvicorn
 gunicorn
-openpyxl
+# openpyxl

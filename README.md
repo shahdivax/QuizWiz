@@ -95,6 +95,7 @@ Ensure you have the following installed:
 
 2. Update `config.py` with any additional settings specific to your deployment.
 
+3. Uncomment the all the comments and lines from `api/app.py` and `requirements.txt` when running locally
 ## Usage
 
 ### Running the Application
