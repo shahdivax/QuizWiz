@@ -4,8 +4,8 @@ from llama_index.core.settings import Settings
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.vector_stores import MetadataFilter, MetadataFilters, ExactMatchFilter, FilterOperator
 from llama_index.core.query_engine import RetrieverQueryEngine
-from llama_index.legacy.embeddings import GeminiEmbedding
-from llama_index.llms.gemini import Gemini
+from llama_index.embeddings.mistralai import MistralAIEmbedding
+from llama_index.llms.mistralai import MistralAI
 from llama_index.vector_stores.mongodb import MongoDBAtlasVectorSearch
 from dotenv import load_dotenv
 from sqlalchemy import make_url
@@ -13,8 +13,8 @@ from llama_index.vector_stores.postgres import PGVectorStore
 import psycopg2
 load_dotenv()
 
-Settings.embed_model = GeminiEmbedding(model_name="models/text-embedding-004")
-Settings.llm = Gemini(model_name="models/gemini-1.5-flash-latest")
+Settings.embed_model = MistralAIEmbedding(model_name="mistral-embed")
+Settings.llm = MistralAI() # MistralAI(model_name="mistral-large-latest")
 
 connection_string = os.environ["POSTGRESQL_URI"]
 
