@@ -34,7 +34,7 @@ def get_vector_store(bot_id):
         port=url.port,
         user=url.username,
         table_name=f"QuizWiz_{bot_id}",
-        embed_dim=768,
+        embed_dim=1024,
     )
 
 
