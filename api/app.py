@@ -191,4 +191,5 @@ def index():
 def health_check():
     return jsonify({'status': 'healthy'}), 200
 
-app.run()
+if __name__ == '__main__':
+    app.run()
