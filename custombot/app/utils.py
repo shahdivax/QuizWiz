@@ -41,7 +41,7 @@ def get_vector_store(bot_id):
 def initialize_index_for_bot(bot_id, bot_name, document_paths):
     vector_store = get_vector_store(bot_id)
     documents = SimpleDirectoryReader(input_dir=document_paths).load_data()
-    sanitized_documents = [doc.copy() for doc in documents]
+    sanitized_documents = [doc.model_copy() for doc in documents]
     for doc in sanitized_documents:
         doc.text = sanitize_text(doc.text)
 
