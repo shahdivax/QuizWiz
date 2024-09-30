@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizWiz - One Click Help-Bot Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { "50": "#fdf2f8", "100": "#fce7f3", "200": "#fbcfe8", "300": "#f9a8d4", "400": "#f472b6", "500": "#ec4899", "600": "#db2777", "700": "#be185d", "800": "#9d174d", "900": "#831843", "950": "#500724" }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-violet-500">
+                 
+                </h1>
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <h2 class="text-xl font-semibold mb-6 text-center">One Click Help-Bot Maker</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Note: This is just a demo and may not work perfectly.</p>
+            <form id="botForm" class="space-y-6">
+                <div class="p-4 bg-gray-200 dark:bg-gray-700 rounded-lg">
+                    <label for="fileUpload" class="flex flex-col items-center justify-center h-24 border-2 border-dashed border-gray-400 rounded-lg cursor-pointer hover:border-primary-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <span class="text-sm">Upload Files</span>
+                    </label>
+                    <input id="fileUpload" type="file" multiple class="hidden" />
+                </div>
+                <div id="uploadedFiles" class="mt-6 p-4 bg-gray-200 dark:bg-gray-700 rounded-lg">
+                    <h3 class="font-semibold mb-2">Uploaded Files:</h3>
+                    <ul id="fileList" class="space-y-2"></ul>
+                </div>
+
+                <input type="text" id="hostUrl" placeholder="Server URL" value="https://quizwiz-mtcq.onrender.com/" class="w-full p-2 rounded-lg bg-gray-200 dark:bg-gray-700" required>
+                <input type="text" id="botName" placeholder="Bot Name" class="w-full p-2 rounded-lg bg-gray-200 dark:bg-gray-700" required>
+
+                <div class="flex space-x-4">
+                    <div class="flex-1">
+                        <label for="logoUpload" class="flex flex-col items-center justify-center h-24 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-sm">Upload Logo</span>
+                        </label>
+                        <input id="logoUpload" type="file" accept="image/*" class="hidden" />
+                    </div>
+                    <div id="logoPreview" class="flex-1 flex items-center justify-center rounded-lg bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300">
+                        <span class="text-sm">Preview</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="themeSelect" class="block font-medium">Select Theme:</label>
+                    <a href="https://quiz-wiz-official.vercel.app/#demo" class="text-primary-500 hover:text-primary-600 transition-colors" id="demoLink">View Demos</a>
+                    <select id="themeSelect" class="w-full p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
+                        <option value="default">Default Theme</option>
+                        <option value="neural-nexus">Neural Nexus</option>
+                        <option value="quantum-realm">Quantum Realm Communicator</option>
+                        <option value="interdimensional-portal">Interdimensional Portal</option>
+                        <option value="floating-islands">Floating Island</option>
+                        <option value="ethereal-whisper">Ethereal Wisper</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="generateButton" class="w-full py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white transition-colors">
+                    Generate Snippet
+                </button>
+            </form>
+
+           <div id="snippetContainer" class="mt-6 p-4 bg-gray-200 dark:bg-gray-700 rounded-lg hidden">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="font-semibold">Embed Code:</h3>
+                    <button id="copySnippet" class="px-3 py-1 bg-primary-500 text-white rounded hover:bg-primary-600 transition-colors">
+                        Copy
+                    </button>
+                </div>
+                <pre id="snippet" class="text-sm overflow-x-auto whitespace-pre-wrap"></pre>
+            </div>
+
+            <div id="notification" class="fixed bottom-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg hidden">
+                Snippet copied to clipboard!
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
