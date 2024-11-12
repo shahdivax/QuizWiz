@@ -1,7 +1,4 @@
 # QuizWiz
-
-**(This project is deprecated as of now, as Llamaindex has stopped supporting the Gemini API via Google Studio)**
-
 QuizWiz is an advanced, AI-powered chatbot creation platform that enables users to build, deploy, and interact with custom chatbots. Leveraging cutting-edge natural language processing technologies, QuizWiz offers a user-friendly interface for creating intelligent conversational agents tailored to specific domains or purposes.
 
 ## Table of Contents
