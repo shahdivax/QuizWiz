@@ -272,7 +272,7 @@ function updateSnippet(data = null) {
         case 'neural-nexus':
             snippetCode = `
                 <div id="neural-nexus-container"></div>
-                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/api/static/js/neural-nexus-widget.js"></script>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/custombot/static/js/neural-nexus-widget.js"></script>
                 <script>
                     NeuralNexusWidget.init({
                         serverUrl: '${serverUrl}',
@@ -286,7 +286,7 @@ function updateSnippet(data = null) {
         case 'quantum-realm':
             snippetCode = `
                 <div id="quantum-realm-communicator-container"></div>
-                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/api/static/js/quantum-realm-communicator.js"></script>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/custombot/static/js/quantum-realm-communicator.js"></script>
                 <script>
                     QuantumRealmCommunicator.init({
                         serverUrl: '${serverUrl}',
@@ -300,7 +300,7 @@ function updateSnippet(data = null) {
         case 'interdimensional-portal':
             snippetCode = `
                 <div id="interdimensional-portal-container"></div>
-                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/api/static/js/interdimensional-portal-widget.js"></script>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/custombot/static/js/interdimensional-portal-widget.js"></script>
                 <script>
                     InterdimensionalPortalWidget.init({
                         serverUrl: '${serverUrl}',
@@ -314,7 +314,7 @@ function updateSnippet(data = null) {
         case 'floating-islands':
             snippetCode = `
                 <div id="floatingislands-container"></div>
-                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/api/static/js/floating-islands-widget.js"></script>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/custombot/static/js/floating-islands-widget.js"></script>
                 <script>
                     FloatingIslandsChat.init({
                         serverUrl: '${serverUrl}',
@@ -328,7 +328,7 @@ function updateSnippet(data = null) {
         case 'ethereal-whisper':
             snippetCode = `
                 <div id="ethereal-whisper-chat-container"></div>
-                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/api/static/js/ethereal-whisper-chat.js"></script>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/custombot/static/js/ethereal-whisper-chat.js"></script>
                 <script>
                     EtherealWhisperChat.init({
                         serverUrl: '${serverUrl}',
@@ -342,7 +342,7 @@ function updateSnippet(data = null) {
         default:
             snippetCode = `
                 <div id="custombot-container"></div>
-                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/api/static/js/widget.js"></script>
+                <script src="https://cdn.jsdelivr.net/gh/shahdivax/Quizwiz/custombot/static/js/widget.js"></script>
                 <script>
                     CustomBot.init({
                         serverUrl: '${serverUrl}',
